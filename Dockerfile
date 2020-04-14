@@ -3,7 +3,7 @@ FROM node:8
 
 # install dependencies in a different location for easier app bind mounting for local development
 WORKDIR /user
-COPY package.json package-lock.json tsconfig.json ./
+COPY package.json package-lock.json nest-cli.json tsconfig.build.json tsconfig.json ./
 RUN npm install && npm cache clean --force
 ENV PATH /opt/node_modules/.bin:$PATH
 
