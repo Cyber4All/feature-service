@@ -9,15 +9,15 @@ export class LearningObjectsService {
     
     constructor(@InjectModel('LearningObject') private learningObjectModel: Model<any>){}
 
-    async getAll(): Promise<LearningObjectDto[]> {
+    async getAllLearningObjects(): Promise<LearningObjectDto[]> {
         return await this.learningObjectModel.find({}, {"_id":false}).limit(5);
     }
 
-    async getOne(cuid: string): Promise<LearningObjectDto> {                                                                                                                              
+    async getOneLearningObject(cuid: string): Promise<LearningObjectDto> {                                                                                                                              
         return await this.learningObjectModel.findOne({cuid: cuid}, {"_id":false})
     }
 
-    async updateAll (learningObject: LearningObjectDto[]): Promise<LearningObjectDto[]> {
+    async updateAllFeatured (learningObject: LearningObjectDto[]): Promise<LearningObjectDto[]> {
         await this.learningObjectModel.deleteMany({})
         const publishLearningObject = await this.learningObjectModel.insertMany(learningObject)
         return publishLearningObject; 

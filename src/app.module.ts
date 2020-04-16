@@ -6,7 +6,7 @@ import { LearningObjectModule } from './learning-objects/leaning-object.module';
 
 
 @Module({
-  imports: [LearningObjectModule, MongooseModule.forRoot('mongodb://mongodb:27017/feature', { useUnifiedTopology: true,useNewUrlParser: true })],
+  imports: [LearningObjectModule, MongooseModule.forRoot(process.env.CLARK_DB_URI_DEV, { useUnifiedTopology: true,useNewUrlParser: true })],
   controllers: [AppController],
   providers: [AppService],
 })

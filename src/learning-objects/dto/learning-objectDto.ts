@@ -8,7 +8,7 @@ export class LearningObjectDto {
         organization: string,
     };
     collections: string;
-    contributors: [];
+    contributors: [string];
     description: string;
     cuid?: string;
     length: string;

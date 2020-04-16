@@ -6,7 +6,7 @@ const app = 'http://localhost:3000';
 let learningObjectDto = new LearningObjectDto();
 let learningObjectDtoList = [learningObjectDto, learningObjectDto, learningObjectDto, learningObjectDto, learningObjectDto];
 
-describe('getAll', () => {
+describe('getAllLearningObjects', () => {
   it('get all learning objects', () => {
     return request(app)
     .get('/learning-objects')
@@ -14,7 +14,7 @@ describe('getAll', () => {
   });
 });
 
-describe('updateAll', () => {
+describe('updateAllFeatured', () => {
   it('update route', () => {
     return request(app)
     .patch('/learning-objects')
