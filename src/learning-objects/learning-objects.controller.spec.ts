@@ -2,14 +2,14 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LearningObjectsController } from './learning-objects.controller';
 import { LearningObjectsService } from './learning-objects.service';
 import { LearningObjectDto } from './dto/learning-objectDto';
-import { MongooseModule, getModelToken } from '@nestjs/mongoose';
+import { getModelToken } from '@nestjs/mongoose';
 
 
 describe('LearningObjects Controller', () => {
   let learningObjectsController: LearningObjectsController;
   let learningObjectsService: LearningObjectsService;
-  let learningObjectDto = new LearningObjectDto();
-  let learningObjectDtoList = [learningObjectDto, learningObjectDto, learningObjectDto, learningObjectDto, learningObjectDto];
+  const learningObjectDto = new LearningObjectDto();
+  const learningObjectDtoList = [learningObjectDto, learningObjectDto, learningObjectDto, learningObjectDto, learningObjectDto];
 
 
   beforeEach(async () => {

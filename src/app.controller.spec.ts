@@ -1,9 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { LearningObjectsService } from './learning-objects/learning-objects.service';
-import { LearningObjectSchema } from './learning-objects/schemas/learning-objectSchema';
-import { MongooseModule } from '@nestjs/mongoose';
 
 describe('AppController', () => {
   let appController: AppController;
