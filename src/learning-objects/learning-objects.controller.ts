@@ -1,20 +1,20 @@
-import { Controller, Get, Patch, Body, Param, BadRequestException, UseGuards, HttpCode, ForbiddenException,} from '@nestjs/common';
+import { Controller, Get, Patch, Body, Param, BadRequestException, UseGuards, HttpCode } from '@nestjs/common';
 import { LearningObjectDto } from './dto/learning-objectDto'
 import { LearningObjectsService } from './learning-objects.service';
-import {JwtAuthGuard } from './auth/auth.gaurd';
+import { JwtAuthGuard } from './auth/auth.gaurd';
 
-@Controller('learning-objects')
+@Controller('/featured/learning-objects')
 export class LearningObjectsController {
-    constructor(private learningObjectServive: LearningObjectsService) {}
+    constructor(private learningObjectService: LearningObjectsService) {}
     @Get()
     async getAll(): Promise<LearningObjectDto[]> {
         
-        return await this.learningObjectServive.getAllLearningObjects();
+        return await this.learningObjectService.getAllLearningObjects();
     }
     
     @Get(':cuid')
     async getOne(@Param('cuid') cuid): Promise<LearningObjectDto> {
-        return this.learningObjectServive.getOneLearningObject(cuid);
+        return this.learningObjectService.getOneLearningObject(cuid);
     }
 
     @UseGuards(JwtAuthGuard)
@@ -25,7 +25,7 @@ export class LearningObjectsController {
         {
             throw new BadRequestException('ERROR!! Array must contain 5 Learning Objects, nothing more & nothing less!!')
         }
-        await this.learningObjectServive.updateAllFeatured(learningObjectDto);
+        await this.learningObjectService.updateAllFeatured(learningObjectDto);
         return {message: `Learning Objects Updated`};
     }
 }

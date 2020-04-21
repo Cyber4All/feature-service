@@ -1,6 +1,4 @@
 import * as mongoose from 'mongoose';
-import{ IsArray, ValidateNested, ArrayMinSize, ArrayMaxSize, IsString } from 'class-validator'
-import { Type } from 'class-transformer'
 
 export interface LearningObject extends mongoose.Document {
     author: {
