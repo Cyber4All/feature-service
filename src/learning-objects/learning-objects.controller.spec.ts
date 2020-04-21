@@ -35,14 +35,14 @@ describe('LearningObjects Controller', () => {
 
   describe('getAll', () => {
     it('should return an array of 5 learning objects', async () => {
-      jest.spyOn(learningObjectsService, 'getAll').mockImplementation(async () => learningObjectDtoList);
+      jest.spyOn(learningObjectsService, 'getAllLearningObjects').mockImplementation(async () => learningObjectDtoList);
       expect(await learningObjectsController.getAll()).toEqual(learningObjectDtoList);
     })
   });
 
   describe('updateAll', () => {
     it('Update array of all 5 learning objects', async () => {
-      jest.spyOn(learningObjectsService, 'updateAll').mockImplementation(async () => learningObjectDtoList);
+      jest.spyOn(learningObjectsService, 'updateAllFeatured').mockImplementation(async () => learningObjectDtoList);
       expect(await learningObjectsController.updateAll(learningObjectDtoList)).toHaveProperty('message');
     })
   });
