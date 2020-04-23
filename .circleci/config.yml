@@ -30,7 +30,7 @@ jobs:
           command: docker pull $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1
       - run: 
           name: Run Tests
-          command: docker run $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1 npm test:e2e
+          command: docker run $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1 npm run test:e2e
 
   create-sentry-release:
     <<: *defaults
