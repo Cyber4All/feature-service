@@ -1,4 +1,4 @@
-import { LearningObjectDto } from './dto/learning-objectdto';
+import { LearningObjectDto } from './dto/learning-objectDto';
 import * as request from 'supertest';
 
 const app = 'http://localhost:3000';
