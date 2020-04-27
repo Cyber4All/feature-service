@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
-  imports: [LearningObjectModule, ConfigModule.forRoot({isGlobal: true,}), MongooseModule.forRoot(process.env.CLARK_DB_URI_DEV, { useUnifiedTopology: true,useNewUrlParser: true })],
+  imports: [LearningObjectModule, ConfigModule.forRoot({isGlobal: true}), MongooseModule.forRoot(process.env.CLARK_DB_URI_DEV, { useUnifiedTopology: true,useNewUrlParser: true })],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -17,7 +17,7 @@ export class LearningObjectsController {
         return this.learningObjectService.getOneLearningObject(cuid);
     }
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Patch()
     @HttpCode(201)
     async updateAll(@Body() learningObjectDto: LearningObjectDto[]): Promise<{ message: string }> { 
