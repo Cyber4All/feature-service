@@ -9,9 +9,11 @@ export class LearningObjectsService {
     constructor(@InjectModel('LearningObject') private learningObjectModel: Model<any>){}
 
     async getAllLearningObjects(): Promise<LearningObjectDto[]> {
-        return await this.learningObjectModel.find({}, {"_id":false}).limit(5);
+        const documents = await this.learningObjectModel.find({}, {"_id":false}).limit(5);
+        const variable = documents.map(d => LearningObjectDto.newLearningObjectDto(d));
+        return variable
     }
-
+ 
     async getOneLearningObject(cuid: string): Promise<LearningObjectDto> {                                                                                                                              
         return await this.learningObjectModel.findOne({cuid: cuid}, {"_id":false})
     }

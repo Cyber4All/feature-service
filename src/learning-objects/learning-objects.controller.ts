@@ -7,9 +7,9 @@ import { JwtAuthGuard } from './auth/auth.gaurd';
 export class LearningObjectsController {
     constructor(private learningObjectService: LearningObjectsService) {}
     @Get()
+    @HttpCode(200)
     async getAll(): Promise<LearningObjectDto[]> {
-        
-        return await this.learningObjectService.getAllLearningObjects();
+       return await this.learningObjectService.getAllLearningObjects();        
     }
     
     @Get(':cuid')
@@ -17,7 +17,7 @@ export class LearningObjectsController {
         return this.learningObjectService.getOneLearningObject(cuid);
     }
 
-    // @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Patch()
     @HttpCode(201)
     async updateAll(@Body() learningObjectDto: LearningObjectDto[]): Promise<{ message: string }> { 

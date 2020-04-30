@@ -17,17 +17,15 @@ describe('AppController (e2e)', () => {
   beforeAll(async () => {
     process.env.KEY = 'THIS_IS_A_KEY';
     process.env.CLARK_DB_URI_DEV = globalConfig.mongoUri;
-    console.log(process.env.CLARK_DB_URI_DEV);
 
     const moduleFixture = await Test.createTestingModule({
       imports: [MongooseModule.forRoot(process.env.CLARK_DB_URI_DEV, { useUnifiedTopology: true,useNewUrlParser: true })],
       controllers: [AppController],
       providers: [AppService],
     }).compile();
-    console.log('moduleFixture', moduleFixture)
 
     app = moduleFixture.createNestApplication();
-    app = await app.init();
+    await app.init();
   });
 
   it('/ (GET)', () => {
