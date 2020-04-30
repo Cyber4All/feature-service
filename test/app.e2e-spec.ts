@@ -34,9 +34,10 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Welcome to CLARK Feature-Service');
   });
-  
-  afterAll(async () => {
-    await app.close();
+
+  afterAll(done => {
+    app.close();
+    done();
   });
 
 });

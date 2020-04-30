@@ -61,8 +61,9 @@ describe("LearningObjectController (e2e)", () => {
     .expect('{"message":"Learning Objects Updated"}')
   });
 
-  afterAll(async () => {
-    await app.close();
+  afterAll(done => {
+    app.close();
+    done();
   });
 
 });
