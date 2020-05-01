@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Build Image
           command: |
-            docker build -t $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1 .
+            docker build -t $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1 -f Dockerfile.prod .
       - run:
           name: Login to docker
           command: docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
@@ -31,23 +31,6 @@ jobs:
       - run: 
           name: Run Tests
           command: docker run $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1 npm run test:e2e
-
-  # create-sentry-release:
-  #   <<: *defaults
-  #   docker:
-  #     - image: circleci/node:8
-  #   steps:
-  #     - checkout
-  #     - run:
-  #         name: Install Sentry CLI
-  #         command: curl -sL https://sentry.io/get-cli/ | bash
-  #     - run:
-  #         name: Create Sentry Release Object
-  #         command: |
-  #           export SEMVER=$(cat ./package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
-  #           sentry-cli releases -p ${SENTRY_PROJECT_NAME} new ${SEMVER}
-  #           sentry-cli releases -p ${SENTRY_PROJECT_NAME} set-commits --auto ${SEMVER}
-  #           sentry-cli releases -p ${SENTRY_PROJECT_NAME} finalize ${SEMVER}
 
   deploy-production:
     <<: *defaults
