@@ -15,7 +15,7 @@ export const LearningObjectSchema = new mongoose.Schema ({
     _id: mongoose.Schema.Types.ObjectId,
     id: String,
     author: AuthorSchema,
-    collections: String, //collection is a mongoose reserve word
+    collectionName: String, //collection is a mongoose reserve word
     contributors: [ContributorSchema],
     description: String,
     cuid: String,
@@ -23,7 +23,7 @@ export const LearningObjectSchema = new mongoose.Schema ({
     name: String,
     outcomes: [OutcomeSchema],
     version: Number,
-    status: String
+    status: String,
 },{
     _id:true,
     versionKey:false,

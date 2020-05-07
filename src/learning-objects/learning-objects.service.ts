@@ -10,8 +10,9 @@ export class LearningObjectsService {
 
     async getAllLearningObjects(): Promise<LearningObjectDto[]> {
         const documents = await this.learningObjectModel.find({}, {"_id":false}).limit(5);
-        const variable = documents.map(d => LearningObjectDto.newLearningObjectDto(d));
-        return variable
+        // const variable = documents.map(d => LearningObjectDto.newLearningObjectDto(d));
+        // console.log(variable)
+        return documents
     }
  
     async getOneLearningObject(cuid: string): Promise<LearningObjectDto> {                                                                                                                              
@@ -19,8 +20,11 @@ export class LearningObjectsService {
     }
 
     async updateAllFeatured (learningObject: LearningObjectDto[]): Promise<LearningObjectDto[]> {
-        await this.learningObjectModel.deleteMany({})
-        const publishLearningObject = await this.learningObjectModel.insertMany(learningObject)
+        await this.learningObjectModel.deleteMany({});
+        const payload = learningObject.map(l => {
+            return {...l, collectionName:l.collection}
+        });
+        const publishLearningObject = await this.learningObjectModel.insertMany(payload);
         return publishLearningObject; 
     }
 }

@@ -7,7 +7,7 @@ export class LearningObjectDto {
         email: string,
         organization: string,
     };
-    collections: string;
+    collection: string;
     contributors: [string];
     description: string;
     cuid?: string;
@@ -27,7 +27,7 @@ export class LearningObjectDto {
         dto.author.username = document['author']['username'],
         dto.author.email = document['author']['email'],
         dto.author.organization = document['author']['organization'],
-        dto.collections = document['collection'],
+        dto.collection = document['collection'],
         dto.contributors = document['contributors'],
         dto.description = document['description'],
         dto.cuid = document['cuid'],
