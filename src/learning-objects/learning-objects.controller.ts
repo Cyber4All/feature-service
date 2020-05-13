@@ -21,7 +21,7 @@ export class LearningObjectsController {
     @Patch()
     @HttpCode(201)
     async updateAll(@Body() learningObjectDto: LearningObjectDto[]): Promise<{ message: string }> { 
-        if (learningObjectDto.length < 1 || learningObjectDto.length > 5)
+        if (learningObjectDto.length != 5)
         {
             throw new BadRequestException('ERROR!! Array must contain 5 Learning Objects, nothing more & nothing less!!')
         }

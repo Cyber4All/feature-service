@@ -17,11 +17,11 @@ export class LearningObjectsService {
     }
 
     async updateAllFeatured (learningObject: LearningObjectDto[]): Promise<LearningObjectDto[]> {
-        await this.learningObjectModel.deleteMany({});
+        await this.learningObjectModel.remove({});
         const payload = learningObject.map(l => {
             return {...l, collectionName:l.collection}
         });
-        const publishLearningObject = await this.learningObjectModel.insertMany(payload);
+        const publishLearningObject = await this.learningObjectModel.insertMany(payload)
         return publishLearningObject; 
     }
 }
