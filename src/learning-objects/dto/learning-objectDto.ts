@@ -12,8 +12,8 @@ export class LearningObjectDto {
     description: string;
     cuid?: string;
     length: string;
+    levels: [string];
     name: string;
-    levels: string;
     version: number;
     status: string;
 };

@@ -13,7 +13,7 @@ const AuthorSchema = new mongoose.Schema ({
 const ContributorSchema = new mongoose.Schema ({ 
     name: String,
     username: String,
-})
+});
 
 export const LearningObjectSchema = new mongoose.Schema ({
 
@@ -26,6 +26,7 @@ export const LearningObjectSchema = new mongoose.Schema ({
     description: String,
     cuid: String,
     length: String,
+    levels: [String],
     name: String,
     version: Number,
     status: String,
