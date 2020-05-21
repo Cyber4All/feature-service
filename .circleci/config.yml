@@ -47,16 +47,16 @@ jobs:
       - run:
           name: Publish Image 
           command: |
-            export SEMVER=$(cat ./package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
-            docker tag "${DOCKER_USER_ORG}/feature-service:${CIRCLE_SHA1}" "${DOCKER_USER_ORG}/feature-service:${SEMVER}"
-            docker push "${DOCKER_USER_ORG}/feature-service:${SEMVER}"
+              export SEMVER=$(cat ./package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+              docker tag "${DOCKER_USER_ORG}/feature-service:${CIRCLE_SHA1}" "${DOCKER_USER_ORG}/feature-service:${SEMVER}"
+              docker push "${DOCKER_USER_ORG}/feature-service:${SEMVER}"
       - run:
           name: Deploy to ECS
           command: |
-            export SEMVER=$(cat ./package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
-            export DOCKER_IMAGE="${DOCKER_USER_ORG}/feature-service:${SEMVER}"
-            chmod +x ./deploy.sh
-            sh ./deploy.sh
+              export SEMVER=$(cat ./package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+              export DOCKER_IMAGE="${DOCKER_USER_ORG}/feature-service:${SEMVER}"
+              chmod +x ./deploy.sh
+              sh ./deploy.sh
 
 workflows:
   version: 2
