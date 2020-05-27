@@ -31,7 +31,8 @@ jobs:
                     - ./deploy.sh
 
     test:
-        <<: *defaults
+        executor:
+            name: node/default
         steps: 
           - setup_remote_docker
           - run: 
