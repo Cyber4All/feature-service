@@ -9,9 +9,7 @@ export class LearningObjectsService {
     constructor(@InjectModel('LearningObject') private learningObjectModel: Model<any>){}
 
     async getAllLearningObjects(): Promise<LearningObjectDto[]> {
-        const documents = await this.learningObjectModel.find({}, {"_id":false}).limit(5);
-        const variable = documents.map(d => LearningObjectDto.newLearningObjectDto(d));
-        return variable
+        return await this.learningObjectModel.find({}, {"_id":false}).limit(5);
     }
  
     async getOneLearningObject(cuid: string): Promise<LearningObjectDto> {                                                                                                                              
@@ -19,8 +17,11 @@ export class LearningObjectsService {
     }
 
     async updateAllFeatured (learningObject: LearningObjectDto[]): Promise<LearningObjectDto[]> {
-        await this.learningObjectModel.deleteMany({})
-        const publishLearningObject = await this.learningObjectModel.insertMany(learningObject)
+        await this.learningObjectModel.remove({});
+        const payload = learningObject.map(l => {
+            return {...l, collectionName:l.collection}
+        });
+        const publishLearningObject = await this.learningObjectModel.insertMany(payload)
         return publishLearningObject; 
     }
 }
