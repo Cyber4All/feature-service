@@ -1,93 +1,87 @@
 defaults: &defaults
     working_directory: ~/feature-service
     docker:
-       - image: cyber4all/circleci-aws:docker-git
-version: 2
+        - image: cyber4all/circleci-aws:docker-git
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
 jobs:
-  build:
-    <<: *defaults
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run:
-          name: Build Image
-          command: |
-            docker build -t $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1 -f Dockerfile.prod .
-      - run:
-          name: Login to docker
-          command: docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
-      - run:
-          name: Publish Image
-          command: |
-            docker push "${DOCKER_USER_ORG}/feature-service:${CIRCLE_SHA1}"
+    build:
+        executor:
+            name: node/default
+        steps:
+            - checkout
+            - setup_remote_docker
+            - run:
+                name: Build Image
+                command: | 
+                    docker build -t feature-service:$CIRCLE_SHA1 .
+            - run: 
+                name: Login to docker
+                command: docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
+            - run:
+                name: Publish Image 
+                command: |
+                    docker tag feature-service:$CIRCLE_SHA1 "${DOCKER_USER_ORG}/feature-service:${CIRCLE_SHA1}"
+                    docker push "${DOCKER_USER_ORG}/feature-service:${CIRCLE_SHA1}"
+            - persist_to_workspace: 
+                root: ./
+                paths: 
+                    - ./package.json
+                    - ./deploy.sh
+    test:
+        <<: *defaults
+        steps: 
+          - setup_remote_docker
+          - run: 
+              name: Get Image
+              command: docker pull $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1
+          - run: 
+              name: Run Tests
+              command: docker run $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1 npm run test:e2e
 
-  test:
-    <<: *defaults
-    steps: 
-      - setup_remote_docker
-      - run: 
-          name: Get Image
-          command: docker pull $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1
-      - run: 
-          name: Run Tests
-          command: docker run $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1 npm run test:e2e
-
-  deploy-production:
-    <<: *defaults
-    steps:
-      - attach_workspace: 
-          at: ~/feature-service
-      - setup_remote_docker
-      - run:
-          name: Login to docker
-          command: docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
-      - run:
-          name: Pull Image
-          command: docker pull "${DOCKER_USER_ORG}/feature-service:${CIRCLE_SHA1}"
-      - run:
-          name: Publish Image 
-          command: |
-            export SEMVER=$(cat ./package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
-            docker tag "${DOCKER_USER_ORG}/feature-service:${CIRCLE_SHA1}" "${DOCKER_USER_ORG}/feature-service:${SEMVER}"
-            docker push "${DOCKER_USER_ORG}/feature-service:${SEMVER}"
-      - run:
-          name: Deploy to ECS
-          command: |
-            export SEMVER=$(cat ./package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
-            export DOCKER_IMAGE="${DOCKER_USER_ORG}/feature-service:${SEMVER}"
-            chmod +x ./deploy.sh
-            sh ./deploy.sh
-
+    deploy-production:
+        <<: *defaults
+        steps:
+            - attach_workspace: 
+                at: ~/feature-service
+            - setup_remote_docker
+            - run:
+                name: Login to dockerxw
+                command: docker login -u "${DOCKER_USER}" -p "${DOCKER_PASS}"
+            - run:
+                name: Pull Image
+                command: docker pull "${DOCKER_USER_ORG}/feature-service:${CIRCLE_SHA1}"
+            - run:
+                name: Publish Image 
+                command: |
+                    export SEMVER=$(cat ./package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+                    docker tag "${DOCKER_USER_ORG}/outcome-service:${CIRCLE_SHA1}" "${DOCKER_USER_ORG}/feature-service:${SEMVER}"
+                    docker push "${DOCKER_USER_ORG}/outcome-service:${SEMVER}"
+            - run:
+                name: Deploy to ECS
+                command: |
+                    export SEMVER=$(cat ./package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+                    export DOCKER_IMAGE="${DOCKER_USER_ORG}/feature-service:${SEMVER}"
+                    chmod +x ./deploy.sh
+                    sh ./deploy.sh
 workflows:
-  version: 2
-  build-test:
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore: /master/
-      - test:
-          filters:
-            branches:
-              ignore: /master/
-          requires:
-            - build
-              
-  build-test-sentry-deploy:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: /master/
-      - test:
-          requires:
-            - build
-          filters:
-            branches:
-              only: /master/
-      - deploy-production:
-          requires:
-            - test
-          filters:
-            branches:
-              only: /master/
+    build-and-test:
+        jobs:
+            - build:
+                filters:
+                    branches:
+                        ignore: /master/
+
+    build-test-deploy: 
+        jobs: 
+            - build:
+                filters:
+                    branches:
+                        only: /master/
+            - deploy-production:
+                requires: 
+                    - build
+                filters:
+                    branches:
+                        only: /master/ 
