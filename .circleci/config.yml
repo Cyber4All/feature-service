@@ -83,7 +83,6 @@ workflows:
             - deploy-production:
                 requires: 
                     - build
-                    - test
                 filters:
                     branches:
                         only: /master/ 
