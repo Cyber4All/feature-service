@@ -2,10 +2,11 @@ import { Controller, Get, Patch, Body, Param, BadRequestException, UseGuards, Ht
 import { LearningObjectDto } from './dto/learning-objectDto'
 import { LearningObjectsService } from './learning-objects.service';
 import { JwtAuthGuard } from './auth/auth.gaurd';
+import { SGService } from 'src/services/send-grid/send-grid.service';
 
 @Controller('/featured/learning-objects')
 export class LearningObjectsController {
-    constructor(private learningObjectService: LearningObjectsService) {}
+    constructor(private learningObjectService: LearningObjectsService, private sgService: SGService) {}
     @Get()
     @HttpCode(200)
     async getAll(): Promise<LearningObjectDto[]> {
@@ -25,7 +26,15 @@ export class LearningObjectsController {
         {
             throw new BadRequestException('ERROR!! Array must contain 5 Learning Objects, nothing more & nothing less!!')
         }
+       
         await this.learningObjectService.updateAllFeatured(learningObjectDto);
+
+        const authors = learningObjectDto.map(learningObject=> { 
+            return learningObject.author.email
+        });
+        //TODO: Send email to authors.
+        await this.sgService.sendFeaturedAuthorEmails(authors);
+
         return {message: `Learning Objects Updated`};
     }
 }

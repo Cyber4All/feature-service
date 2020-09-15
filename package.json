@@ -30,7 +30,9 @@
     "@nestjs/platform-express": "^7.0.0",
     "@nestjs/swagger": "^4.5.1",
     "@nestjs/typeorm": "^7.0.0",
+    "@ntegral/nestjs-sendgrid": "^1.0.0",
     "@ntegral/nestjs-sentry": "^1.0.2",
+    "@sendgrid/mail": "^7.2.5",
     "@shelf/jest-mongodb": "^1.1.5",
     "@types/dotenv": "^8.2.0",
     "class-transformer": "^0.2.3",
@@ -49,6 +51,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
+    "sendgrid": "^5.2.3",
     "swagger-ui-express": "^4.1.4",
     "typeorm": "^0.2.24"
   },
