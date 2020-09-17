@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { LearningObjectDto } from './dto/learning-objectDto';
-import { InjectSendGrid, SendGridService } from '@ntegral/nestjs-sendgrid';
 
 @Injectable()
 export class LearningObjectsService {

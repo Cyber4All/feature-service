@@ -18,7 +18,7 @@ export class LearningObjectsController {
         return this.learningObjectService.getOneLearningObject(cuid);
     }
 
-    @UseGuards(JwtAuthGuard)
+    // @UseGuards(JwtAuthGuard)
     @Patch()
     @HttpCode(201)
     async updateAll(@Body() learningObjectDto: LearningObjectDto[]): Promise<{ message: string }> { 
@@ -27,13 +27,18 @@ export class LearningObjectsController {
             throw new BadRequestException('ERROR!! Array must contain 5 Learning Objects, nothing more & nothing less!!')
         }
        
-        await this.learningObjectService.updateAllFeatured(learningObjectDto);
+        // await this.learningObjectService.updateAllFeatured(learningObjectDto);
 
-        const authors = learningObjectDto.map(learningObject=> { 
-            return learningObject.author.email
+        const mailInfo = learningObjectDto.map(learningObject=> { 
+            return {
+                name: learningObject.author.name.split(" ")[0],
+                email: learningObject.author.email,
+                username: learningObject.author.username,
+                objectName: learningObject.name,
+                cuid: learningObject.cuid
+            }
         });
-        //TODO: Send email to authors.
-        await this.sgService.sendFeaturedAuthorEmails(authors);
+        await this.sgService.sendFeaturedAuthorEmails(mailInfo);
 
         return {message: `Learning Objects Updated`};
     }
