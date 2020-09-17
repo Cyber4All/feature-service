@@ -1,5 +1,6 @@
 import { InjectSendGrid, SendGridService } from '@ntegral/nestjs-sendgrid';
 import { Injectable } from '@nestjs/common';
+import { DefaultEmailParams } from './interfaces/mailer';
 
 enum SENDGRID_TEMPLATES {
     FEATURED_AUTHOR = 'd-f3a813a5262d4900b90b901c4628d612',
@@ -22,7 +23,7 @@ export class SGService {
   }[]){ 
       try {
         for(let info of mailinfo){ 
-            const mailDefauls = { 
+            const mailDefauls: DefaultEmailParams = { 
                 to: info.email,
                 ...MAILER_DEFAULTS,
                 subject: 'Congratulations You\ve been featured on Clark!!',

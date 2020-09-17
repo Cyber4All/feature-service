@@ -1,8 +1,8 @@
 export interface DefaultEmailParams { 
     to: string | string[],
-    from: string,
+    from: {email: string},
     subject: string,
-    template: string,
+    templateId: string,
     templateVars: {},
     text?: string,
     html?: string,
