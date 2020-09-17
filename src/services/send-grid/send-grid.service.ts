@@ -6,7 +6,7 @@ enum SENDGRID_TEMPLATES {
 }
 
 const MAILER_DEFAULTS = { 
-    from: '',
+    from: process.env.DEFAULT_SENDGRID_EMAIL,
 }
 @Injectable()
 export class SGService {
@@ -17,9 +17,8 @@ export class SGService {
      const mailDefauls = { 
          ...MAILER_DEFAULTS,
          to: authors,
-         subject: '',
+         subject: 'Congratulations You\ve been featured on Clark!!',
          templateType: SENDGRID_TEMPLATES.FEATURED_AUTHOR
-
      }
      await this.sgclient.send(mailDefauls);
   }
