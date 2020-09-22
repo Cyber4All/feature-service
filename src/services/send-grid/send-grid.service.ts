@@ -1,18 +1,25 @@
 import { InjectSendGrid, SendGridService } from '@ntegral/nestjs-sendgrid';
 import { Injectable } from '@nestjs/common';
-import { DefaultEmailParams } from './interfaces/mailer';
+import { DefaultEmailParams } from './interfaces/mailer.defaults';
+import * as MAIL_DEFAULTS from './interfaces/mailer.defaults';
 
 enum SENDGRID_TEMPLATES {
     FEATURED_AUTHOR = 'd-f3a813a5262d4900b90b901c4628d612',
 }
 
 const MAILER_DEFAULTS = { 
-    from:{ email:`skaza@towson.edu`},
+    from:{ email:MAIL_DEFAULTS.FROM.NO_REPLY},
 }
 @Injectable()
 export class SGService {
-    
-  constructor(@InjectSendGrid() private readonly sgclient: SendGridService) {}
+  private TEMPLATES = new Map<MAIL_DEFAULTS.TEMPLATES, string>()
+
+  constructor(@InjectSendGrid() private readonly sgclient: SendGridService) {
+      this.TEMPLATES.set(
+          MAIL_DEFAULTS.TEMPLATES.FEATURED_AUTHOR, 
+          SENDGRID_TEMPLATES.FEATURED_AUTHOR
+      );
+  }
 
   async sendFeaturedAuthorEmails(mailinfo: {
       name: string,
@@ -20,17 +27,16 @@ export class SGService {
       email: string,
       cuid: string,
       objectName: string,
-  }[]){ 
-      try {
+  }[]) { 
         for(let info of mailinfo){ 
             const mailDefauls: DefaultEmailParams = { 
                 to: info.email,
                 ...MAILER_DEFAULTS,
-                subject: 'Congratulations You\ve been featured on Clark!!',
-                templateId: SENDGRID_TEMPLATES.FEATURED_AUTHOR,
-                templateVars: { 
+                subject: MAIL_DEFAULTS.SUBJECTS.FEATURED_AUTHOR,
+                templateId: this.getTemplate(MAIL_DEFAULTS.TEMPLATES.FEATURED_AUTHOR),
+                dynamic_template_data: { 
                     user: { 
-                        firstname: info.name,
+                        firstName: info.name,
                         username: info.username,
                     },
                     object: { 
@@ -41,10 +47,14 @@ export class SGService {
             }
             await this.sgclient.send(mailDefauls);
          } 
-      } catch (error) {
-        console.log(error.response.body.errors)
-      }
-    
-     
   }
+
+  private getTemplate(template: MAIL_DEFAULTS.TEMPLATES): string {
+    const id = this.TEMPLATES.get(template);
+    if (id) {
+      return id;
+    }
+    throw new Error(`No existing template for: ${template}`);
+  }
+
 }
