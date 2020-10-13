@@ -15,9 +15,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   // Validate Access Groups
   async validate(payload: UserToken) {
-    if (payload.accessGroups === undefined || !payload.accessGroups.includes('admin' || 'editor')) {
+    if (payload.accessGroups === undefined || !this.isAdminOrEditor(payload.accessGroups)) {
       throw new UnauthorizedException('You have to be an admin or editor in order to update feature learning objects')
     }
     return payload;
+  }
+
+  // Determine if the requester is an admin or editor
+  isAdminOrEditor(userGroup: string[]): Boolean {
+    return userGroup.includes('editor') || userGroup.includes('admin');
   }
 }
