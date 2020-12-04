@@ -1,16 +1,15 @@
-# Anything beyond local dev should pin this to a specific version at https://hub.docker.com/_/node/
-FROM node:8
-
-# install dependencies in a different location for easier app bind mounting for local development
-WORKDIR /user
-COPY package.json package-lock.json nest-cli.json tsconfig.build.json tsconfig.json ./
-RUN npm install && npm cache clean --force
-ENV PATH /opt/node_modules/.bin:$PATH
-
-WORKDIR /user/app
-COPY . .
-
-# Build source and clean up
+FROM node:14 AS builder
+WORKDIR /app
+COPY ./package.json ./package-lock.json ./
 RUN npm install
+COPY ./nest-cli.json ./tsconfig.build.json ./tsconfig.json ./
+ADD ./src ./src
+ADD ./test ./test
+ADD ./test_environment ./test_environment
+RUN npm run build
 
-CMD ["npm", "start"]
+FROM node:14-alpine
+WORKDIR /app
+COPY --from=builder /app ./
+EXPOSE 3000
+CMD ["npm", "run", "start:prod"]

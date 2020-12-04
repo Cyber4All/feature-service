@@ -1,0 +1,6 @@
+.env
+deploy.sh
+
+.circleci/
+dist/
+node_modules/
