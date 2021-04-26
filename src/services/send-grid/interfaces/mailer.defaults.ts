@@ -1,5 +1,5 @@
 export enum FROM {
-    NO_REPLY = 'CLARK <noreply@clark.center>'
+    NO_REPLY = 'CLARK <noreply@secured.team>'
 }
 export enum SUBJECTS {
     FEATURED_AUTHOR = 'Congratulations!! You have been featured on Clark',
