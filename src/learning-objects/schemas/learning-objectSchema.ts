@@ -13,6 +13,7 @@ const AuthorSchema = new mongoose.Schema ({
 const ContributorSchema = new mongoose.Schema ({ 
     name: String,
     username: String,
+    organization: String,
 });
 
 export const LearningObjectSchema = new mongoose.Schema ({
