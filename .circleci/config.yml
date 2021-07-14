@@ -40,11 +40,6 @@ jobs:
             name: node/default
         steps: 
           - setup_remote_docker
-          - setup-aws-cli:
-            aws-access-key-id: AWS_ECS_AccessKey
-            aws-region: AWS_REGION_N_VA
-            aws-secret-access-key: AWS_ECS_SecretKey
-            version: "1"
           - run: 
               name: Get Image
               command: docker pull $DOCKER_USER_ORG/feature-service:$CIRCLE_SHA1
@@ -58,6 +53,11 @@ jobs:
             - attach_workspace: 
                 at: ~/feature-service
             - setup_remote_docker
+            - setup-aws-cli:
+                aws-access-key-id: AWS_ECS_AccessKey
+                aws-region: AWS_REGION_N_VA
+                aws-secret-access-key: AWS_ECS_SecretKey
+                version: "1"
             - run:
                 name: Login to dockerxw
                 command: docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
